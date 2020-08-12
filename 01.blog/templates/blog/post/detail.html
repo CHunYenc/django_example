@@ -1,0 +1,52 @@
+{% extends '../base.html' %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block content %}
+    <div id="postBody">
+        <h1>{{ post.title }}</h1>
+        <p class="date">
+            Published {{ post.publish }} by {{ post.author }}
+        </p>
+        {{ post.body | linebreaks }}
+
+        <a href={% url 'blog:post_list' %}>回首頁</a>
+        <p>
+            <a href={% url 'blog:post_share' post.id %}>分享文章</a>
+        </p>
+    </div>
+    <div id="CommentBody">
+        {% with comments.count as total_comments %}
+            <h2>
+                {{ total_comments }} comment {{ total_comments|pluralize }}
+            </h2>
+        {% endwith %}
+
+        {% for comment in comments %}
+            <div class="comment" style="background: gray;">
+                <p class="info">
+                    Comment {{ forloop.counter }} by {{ comment.name }}
+                    {{ comment.created }}
+                </p>
+                {{ comment.body | linebreaks }}
+            </div>
+        {% empty %}
+            <p>There are no comments yet.</p>
+        {% endfor %}
+    </div>
+    <div id="CommentAdd">
+    {% if new_comment %}
+        <h2>新增留言</h2>
+    {% else %}
+        <h2>Add a new comment</h2>
+        <form action="." method="post">
+            {{ comments_form.as_p }}
+            {% csrf_token %}
+            <p>
+                <input type="submit" value="新增留言">
+            </p>
+        </form>
+    {% endif %}
+    </div>
+
+{% endblock %}
