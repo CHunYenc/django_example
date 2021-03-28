@@ -1,14 +1,27 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Base from "../views/Base.vue";
+import Index from "../views/L1/Index.vue";
+import Login from "../views/L1/Login.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "index",
+    component: Index,
+  },
+  {
+    path: "/u",
+    component: Base,
+    children: [
+      {
+        path: "/u/login",
+        name: "login",
+        component: Login,
+      },
+    ],
   },
   {
     path: "/about",
@@ -17,7 +30,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      import(/* webpackChunkName: "about" */ "../views/L1/About.vue"),
+  },
+  {
+    path: "*",
+    redirect: { name: "About" },
   },
 ];
 
